@@ -1,4 +1,7 @@
-hwaas-site:
+include:
+  - nodejs-package
+
+hwaas-user:
   user.present:
     - name: hwaas
     - home: /home/hwaas
@@ -13,6 +16,10 @@ hwaas-source:
     - name: https://github.com/floyd-may/hwaas.git
     - rev: master 
     - target: /home/hwaas/hwaas-site
+    - require:
+        - user: hwaas-user
+        - pkg : git-client-package
+        - sls: nodejs-package
 
 hwaas-npm-install:  
   cmd.wait:
