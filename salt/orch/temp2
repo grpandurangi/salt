@@ -5,12 +5,14 @@ set-new-minion-role:
     - arg:
       - roles
       - hwaas-web
+
 apply-states-on-new-minion:
   salt.state:
     - tgt: {{ pillar['target-minion'] }}
     - sls: hwaas-service
     - require:
       - salt: set-new-minion-role
+
 refresh-pillar-on-new-minion:
   salt.function:
     - name: saltutil.refresh_pillar
@@ -28,7 +30,6 @@ update-mine-data-from-new-minion:
 update-hwaas-online-grain:
   salt.function:
     - name: grains.append
-    - tgt: {{ pillar['target-minion'] }}
     - arg:
       - hwaas
       - online
@@ -37,8 +38,9 @@ update-hwaas-online-grain:
 
 run-state-apply-on-load-balancer:
   salt.state:
-    - tgt: 'roles:load-blancing'
+    - tgt: roles:load-balancing
     - tgt_type: grain
     - sls: load-balance
     - require:
       - salt: update-hwaas-online-grain
+
